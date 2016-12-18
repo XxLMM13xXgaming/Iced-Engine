@@ -11,6 +11,7 @@ namespace IcedEngine
         public TestGame(int width, int height, string title) : base(width, height, title) { }
 
         private Mesh2D mesh2d;
+        private Shader shader;
 
         protected override void Initialize()
         {
@@ -22,6 +23,7 @@ namespace IcedEngine
             };
 
             mesh2d = new Mesh2D(vertices);
+            shader = new Shader("Resources/Shader/vertex.shader");
         }
 
         protected override void Update()
@@ -31,7 +33,9 @@ namespace IcedEngine
 
         protected override void Render()
         {
+            shader.Start();
             mesh2d.Draw();
+            shader.Stop();
         }
 
         protected override void Shutdown()
