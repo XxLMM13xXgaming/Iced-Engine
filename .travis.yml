@@ -6,4 +6,4 @@ script:
   - xbuild /p:Configuration=Debug IcedEngine.sln
 cache:
   directories:
-    - $HOME/travis/build/MexicanRaindeer/Iced-Engine/packages/OpenTK.2.0.0
+    - /home/travis/build/MexicanRaindeer/Iced-Engine/packages/OpenTK.2.0.0
