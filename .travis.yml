@@ -5,7 +5,7 @@ before_install:
 install:
   - nuget restore IcedEngine.sln
   - wget http://xunit.codeplex.com/downloads/get/721411 
-  - unzip xunit-build-1705.zip -d /testrunner
+  - unzip 721411 -d /testrunner
 script:
   - xbuild /p:Configuration=Debug IcedEngine.sln
   - mono ./testrunner/xunit.console.clr4.x86.exe
