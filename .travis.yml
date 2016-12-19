@@ -1,8 +1,11 @@
 language: csharp
 solution: IcedEngine.sln
+before_install:
+  - sudo apt-get install unzip
 install:
   - nuget restore IcedEngine.sln
-  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+  - wget http://xunit.codeplex.com/downloads/get/721411 
+  - unzip xunit-build-1705.zip -d /testrunner
 script:
   - xbuild /p:Configuration=Debug IcedEngine.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe
+  - mono ./testrunner/xunit.console.clr4.x86.exe
