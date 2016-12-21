@@ -1,0 +1,9 @@
+language: csharp
+solution: IcedEngine.sln
+install:
+  - nuget restore IcedEngine.sln
+script:
+  - xbuild /p:Configuration=Debug IcedEngine.sln
+cache:
+  directories:
+    - /home/travis/build/MexicanRaindeer/Iced-Engine/packages/OpenTK.2.0.0
