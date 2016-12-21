@@ -1,9 +1,4 @@
 ﻿using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IcedEngine
 {
@@ -11,30 +6,24 @@ namespace IcedEngine
     {
         public const int Size = 2;
 
-        private Vector2 position;
-
-        public Vector2 Position
-        {
-            get { return position; }
-            set { position = value; }
-        }
+        public Vector2 Position { get; set; }
 
         public Vertex(Vector2 position)
         {
-            this.position = position;
+            this.Position = position;
         }
 
         public Vertex(float x, float y) : this(new Vector2(x, y)) { }
 
         public static float[] Process(Vertex[] vertices)
         {
-            int count = 0;
+            var count = 0;
 
-            float[] data = new float[vertices.Length * Size];
-            for (int i = 0; i < vertices.Length; i++)
+            var data = new float[vertices.Length * Size];
+            foreach (var vertex in vertices)
             {
-                data[count] = vertices[i].Position.X;
-                data[count + 1] = vertices[i].Position.Y;
+                data[count] = vertex.Position.X;
+                data[count + 1] = vertex.Position.Y;
                 count += 2;
             }
             return data;

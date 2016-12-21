@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
 using OpenTK.Graphics.OpenGL4;
+using OpenTK;
 
 namespace IcedEngine
 {
     public class Shader
     {
-        private int programID;
+        private readonly int programID;
+        private readonly Dictionary<string, int> uniforms;
 
         public Shader(string vertexFileName = null, string fragmentFileName = null)
         {
             programID = GL.CreateProgram();
+            uniforms = new Dictionary<string, int>();
 
             if(programID == 0)
             {
@@ -42,8 +42,8 @@ namespace IcedEngine
 
         private void AddShader(string fileName, ShaderType type)
         {
-            string shader = ReadShader(fileName);
-            int shaderID = GL.CreateShader(type);
+            var shader = ReadShader(fileName);
+            var shaderID = GL.CreateShader(type);
 
             if(shaderID == 0)
             {
@@ -54,9 +54,7 @@ namespace IcedEngine
 
             GL.ShaderSource(shaderID, shader);
             GL.CompileShader(shaderID);
-
-            int compileStatus;
-            GL.GetShader(shaderID, ShaderParameter.CompileStatus, out compileStatus);
+            GL.GetShader(shaderID, ShaderParameter.CompileStatus, out int compileStatus);
             
             if(compileStatus == 0)
             {
@@ -72,9 +70,7 @@ namespace IcedEngine
         private void CompileShader()
         {
             GL.LinkProgram(programID);
-
-            int linkStatus;
-            GL.GetProgram(programID, GetProgramParameterName.LinkStatus, out linkStatus);
+            GL.GetProgram(programID, GetProgramParameterName.LinkStatus, out int linkStatus);
 
             if(linkStatus == 0)
             {
@@ -85,15 +81,12 @@ namespace IcedEngine
             }
 
             GL.ValidateProgram(programID);
-            int validationStatus;
-            GL.GetProgram(programID, GetProgramParameterName.ValidateStatus, out validationStatus);
-            if(validationStatus == 0)
-            {
-                Console.WriteLine("Error validating shader program: Could not validate shader program!");
-                Console.WriteLine(GL.GetProgramInfoLog(programID));
-                Console.ReadLine();
-                Environment.Exit(1);
-            }
+            GL.GetProgram(programID, GetProgramParameterName.ValidateStatus, out int validationStatus);
+            if (validationStatus != 0) return;
+            Console.WriteLine("Error validating shader program: Could not validate shader program!");
+            Console.WriteLine(GL.GetProgramInfoLog(programID));
+            Console.ReadLine();
+            Environment.Exit(1);
         }
 
         public void Start()
@@ -106,13 +99,73 @@ namespace IcedEngine
             GL.UseProgram(0);
         }
 
+        public void AddUniform(string uniformName)
+        {
+            var uniform = GetUniformLocation(uniformName);
+            if(uniform == -1)
+            {
+                Console.WriteLine("Could not find uniform: " + uniformName + "!");
+                Console.ReadLine();
+                Environment.Exit(1);
+            }
+
+            uniforms.Add(uniformName, uniform);
+        }
+
+        private int GetUniformLocation(string uniformName)
+        {
+            return GL.GetUniformLocation(programID, uniformName);
+        }
+
+        #region Uniform Loading
+        public void LoadInt(string uniformName, int value)
+        {
+            GL.Uniform1(uniforms[uniformName], value);
+        }
+
+        public void LoadFloat(string uniformName, int value)
+        {
+            GL.Uniform1(uniforms[uniformName], value);
+        }
+
+        public void LoadDouble(string uniformName, int value)
+        {
+            GL.Uniform1(uniforms[uniformName], value);
+        }
+
+        public void LoadVector(string uniformName, Vector2 value)
+        {
+            GL.Uniform2(uniforms[uniformName], value);
+        }
+
+        public void LoadVector(string uniformName, Vector3 value)
+        {
+            GL.Uniform3(uniforms[uniformName], value);
+        }
+
+        public void LoadVector(string uniformName, Vector4 value)
+        {
+            GL.Uniform4(uniforms[uniformName], value);
+        }
+
+        public void LoadBoolean(string uniformName, bool value)
+        {
+            GL.Uniform1(uniforms[uniformName], value ? 1 : 0);
+        }
+
+        public void LoadMatrix(string uniformName, Matrix4 value)
+        {
+            GL.UniformMatrix4(uniforms[uniformName], true, ref value);
+        }
+        #endregion
+
         private static string ReadShader(string fileName)
         {
-            StringBuilder shader = new StringBuilder();
+            var shader = new StringBuilder();
 
             try
             {
-                using (StreamReader reader = new StreamReader(fileName))
+                using (var reader = new StreamReader(fileName))
                 {
                     string line;
                     while ((line = reader.ReadLine()) != null)

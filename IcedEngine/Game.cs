@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using OpenTK;
 using OpenTK.Graphics;
 
@@ -11,26 +6,22 @@ namespace IcedEngine
 {
     public abstract class Game : GameWindow
     {
-        private static Game instance;
-        public static Game Instance
-        {
-            get { return instance; }
-        }
+        public static Game Instance { get; private set; }
 
-        public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
+        protected Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title)
         {
-            if(instance != null)
+            if(Instance != null)
             {
                 Console.WriteLine("You should never more than one game class!");
             }
-            instance = this;
+            Instance = this;
             Run();
         }
 
         protected override void OnLoad(EventArgs e)
         {
             Initialize();
-            RenderingSystem.Initialize(1);
+            RenderingSystem.Initialize();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)

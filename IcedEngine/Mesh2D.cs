@@ -1,28 +1,29 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IcedEngine
 {
     public class Mesh2D
     {
-        private int vboID;
-        private int size;
+        private readonly int vboID;
+        private readonly int iboID;
+        private readonly int size;
 
-        public Mesh2D(Vertex[] vertices)
+        public Mesh2D(Vertex[] vertices, int[] indices)
         {
             vboID = GL.GenBuffer();
-            size = vertices.Length;
+            iboID = GL.GenBuffer();
+            size = indices.Length;
 
-            float[] data = Vertex.Process(vertices);
+            var data = Vertex.Process(vertices);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(data.Length * sizeof(float)), data, BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, iboID);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(indices.Length * sizeof(int)), indices, BufferUsageHint.StaticDraw);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
         }
 
         public void Draw()
@@ -30,8 +31,12 @@ namespace IcedEngine
             GL.EnableVertexAttribArray(0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vboID);
             GL.VertexAttribPointer(0, Vertex.Size, VertexAttribPointerType.Float, false, Vertex.Size * 4, 0);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, size);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, iboID);
+            GL.DrawElements(BeginMode.Triangles, size, DrawElementsType.UnsignedInt, 0);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+
             GL.DisableVertexAttribArray(0);
         }
     }

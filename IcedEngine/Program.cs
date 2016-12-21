@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using OpenTK;
+﻿using OpenTK;
 
 namespace IcedEngine
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             using (Toolkit.Init())
             {
-                new TestGame(800, 600, "Test Engine");
+                var testGame = new TestGame(800, 600, "Test Engine");
             }
         }
     }

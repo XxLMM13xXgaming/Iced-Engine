@@ -2,29 +2,26 @@
 using OpenTK.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IcedEngine
 {
     public class Input
     {
         //Key Lists
-        private static List<Key> currentKeys = new List<Key>();
-        private static List<Key> downKeys = new List<Key>();
-        private static List<Key> upKeys = new List<Key>();
+        private static readonly List<Key> currentKeys = new List<Key>();
+        private static readonly List<Key> downKeys = new List<Key>();
+        private static readonly List<Key> upKeys = new List<Key>();
 
         //Mouse Lists
-        private static List<MouseButton> currentMouseButtons = new List<MouseButton>();
-        private static List<MouseButton> downMouseButtons = new List<MouseButton>();
-        private static List<MouseButton> upMouseButtons = new List<MouseButton>();
+        private static readonly List<MouseButton> currentMouseButtons = new List<MouseButton>();
+        private static readonly List<MouseButton> downMouseButtons = new List<MouseButton>();
+        private static readonly List<MouseButton> upMouseButtons = new List<MouseButton>();
 
         internal static void Update()
         {
             //Keyboard Loops
             downKeys.Clear();
-            for (int i = 0; i < Enum.GetNames(typeof(Key)).Length; i++)
+            for (var i = 0; i < Enum.GetNames(typeof(Key)).Length; i++)
             {
                 if(GetKey((Key)i) && !currentKeys.Contains((Key)i))
                 {
@@ -33,7 +30,7 @@ namespace IcedEngine
             }
 
             upKeys.Clear();
-            for (int i = 0; i < Enum.GetNames(typeof(Key)).Length; i++)
+            for (var i = 0; i < Enum.GetNames(typeof(Key)).Length; i++)
             {
                 if(!GetKey((Key)i) && currentKeys.Contains((Key)i))
                 {
@@ -42,7 +39,7 @@ namespace IcedEngine
             }
 
             currentKeys.Clear();
-            for (int i = 0; i < Enum.GetNames(typeof(Key)).Length; i++)
+            for (var i = 0; i < Enum.GetNames(typeof(Key)).Length; i++)
             {
                 if(GetKey((Key)i))
                 {
@@ -52,7 +49,7 @@ namespace IcedEngine
 
             //Mouse Loops
             downMouseButtons.Clear();
-            for (int i = 0; i < Enum.GetNames(typeof(MouseButton)).Length; i++)
+            for (var i = 0; i < Enum.GetNames(typeof(MouseButton)).Length; i++)
             {
                 if (GetMouseButton((MouseButton)i) && !currentMouseButtons.Contains((MouseButton)i))
                 {
@@ -61,7 +58,7 @@ namespace IcedEngine
             }
 
             upMouseButtons.Clear();
-            for (int i = 0; i < Enum.GetNames(typeof(MouseButton)).Length; i++)
+            for (var i = 0; i < Enum.GetNames(typeof(MouseButton)).Length; i++)
             {
                 if (!GetMouseButton((MouseButton)i) && currentMouseButtons.Contains((MouseButton)i))
                 {
@@ -70,7 +67,7 @@ namespace IcedEngine
             }
 
             currentMouseButtons.Clear();
-            for (int i = 0; i < Enum.GetNames(typeof(MouseButton)).Length; i++)
+            for (var i = 0; i < Enum.GetNames(typeof(MouseButton)).Length; i++)
             {
                 if (GetMouseButton((MouseButton)i))
                 {
@@ -82,63 +79,33 @@ namespace IcedEngine
         //Keyboard Functions
         public static bool GetKey(Key keyCode)
         {
-            if(!Game.Instance.Focused)
-            {
-                return false;
-            }
-
-            return Keyboard.GetState().IsKeyDown((short)keyCode);
+            return Game.Instance.Focused && Keyboard.GetState().IsKeyDown((short)keyCode);
         }
 
         public static bool GetKeyDown(Key keyCode)
         {
-            if (!Game.Instance.Focused)
-            {
-                return false;
-            }
-
-            return downKeys.Contains(keyCode);
+            return Game.Instance.Focused && downKeys.Contains(keyCode);
         }
 
         public static bool GetKeyUp(Key keyCode)
         {
-            if (!Game.Instance.Focused)
-            {
-                return false;
-            }
-
-            return upKeys.Contains(keyCode);
+            return Game.Instance.Focused && upKeys.Contains(keyCode);
         }
 
         //Mouse Functions
         public static bool GetMouseButton(MouseButton mouseButton)
         {
-            if (!Game.Instance.Focused)
-            {
-                return false;
-            }
-
-            return Mouse.GetState().IsButtonDown(mouseButton);
+            return Game.Instance.Focused && Mouse.GetState().IsButtonDown(mouseButton);
         }
 
         public static bool GetMouseButtonDown(MouseButton mouseButton)
         {
-            if (!Game.Instance.Focused)
-            {
-                return false;
-            }
-
-            return downMouseButtons.Contains(mouseButton);
+            return Game.Instance.Focused && downMouseButtons.Contains(mouseButton);
         }
 
         public static bool GetMouseButtonUp(MouseButton mouseButton)
         {
-            if (!Game.Instance.Focused)
-            {
-                return false;
-            }
-
-            return upMouseButtons.Contains(mouseButton);
+            return Game.Instance.Focused && upMouseButtons.Contains(mouseButton);
         }
 
         public static Vector2 GetMousePosition()
