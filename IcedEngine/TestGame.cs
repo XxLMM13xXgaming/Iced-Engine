@@ -1,7 +1,4 @@
-﻿using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace IcedEngine
 {
@@ -20,7 +17,7 @@ namespace IcedEngine
             shader = new Shader("Resources/Shaders/vertex.shader", "Resources/Shaders/fragment.shader");
             shader.AddUniform("transformationMatrix");
 
-            var vertices = new Vertex[]
+            var vertices = new[]
             {
                 new Vertex(-0.5f, 0.5f),
                 new Vertex(-0.5f, -0.5f),
@@ -28,7 +25,7 @@ namespace IcedEngine
                 new Vertex(0.5f, 0.5f)
             };
 
-            var indices = new int[]
+            var indices = new[]
             {
                 0, 1, 3,
                 3, 1, 2

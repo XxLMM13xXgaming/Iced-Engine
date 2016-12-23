@@ -54,7 +54,7 @@ namespace IcedEngine
 
             GL.ShaderSource(shaderID, shader);
             GL.CompileShader(shaderID);
-            GL.GetShader(shaderID, ShaderParameter.CompileStatus, out int compileStatus);
+            GL.GetShader(shaderID, ShaderParameter.CompileStatus, out var compileStatus);
             
             if(compileStatus == 0)
             {
@@ -70,7 +70,7 @@ namespace IcedEngine
         private void CompileShader()
         {
             GL.LinkProgram(programID);
-            GL.GetProgram(programID, GetProgramParameterName.LinkStatus, out int linkStatus);
+            GL.GetProgram(programID, GetProgramParameterName.LinkStatus, out var linkStatus);
 
             if(linkStatus == 0)
             {
@@ -81,7 +81,7 @@ namespace IcedEngine
             }
 
             GL.ValidateProgram(programID);
-            GL.GetProgram(programID, GetProgramParameterName.ValidateStatus, out int validationStatus);
+            GL.GetProgram(programID, GetProgramParameterName.ValidateStatus, out var validationStatus);
             if (validationStatus != 0) return;
             Console.WriteLine("Error validating shader program: Could not validate shader program!");
             Console.WriteLine(GL.GetProgramInfoLog(programID));

@@ -10,7 +10,7 @@ namespace IcedEngine
 
         public Vertex(Vector2 position)
         {
-            this.Position = position;
+            Position = position;
         }
 
         public Vertex(float x, float y) : this(new Vector2(x, y)) { }
