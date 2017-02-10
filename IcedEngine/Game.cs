@@ -12,7 +12,7 @@ namespace IcedEngine
         {
             if(Instance != null)
             {
-                Console.WriteLine("You should never more than one game class!");
+                Console.WriteLine("You should never have more than one game class!");
             }
             Instance = this;
             Run();
@@ -27,6 +27,7 @@ namespace IcedEngine
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             Input.Update();
+            Time.DeltaTime = e.Time;
             Update();
         }
 

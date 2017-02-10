@@ -55,6 +55,7 @@
     <Compile Include="RenderingSystem.cs" />
     <Compile Include="Shader.cs" />
     <Compile Include="TestGame.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="Transform.cs" />
     <Compile Include="Vertex.cs" />
   </ItemGroup>
